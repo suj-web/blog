@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/lib/editormd/css/editormd.css" th:href="@{/static/lib/editormd/css/editormd.css}">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>写博客</title>
+</head>
+<body>
+<div>
+    <div class="ui m-container-big">
+        <div class="ui top attached segment">
+            <h3 class="ui teal header">编写博客</h3>
+        </div>
+        <div class="ui bottom attached segment">
+            <form id="blog_form" action="#" method="post" class="ui form" th:action="@{/admin/blog/blogAdd}">
+                <input type="hidden" name="published">
+                <div class="two fields">
+                    <div class="required field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">博客标题</label>
+                            <input type="text" name="title" id="title" placeholder="博客标题" th:value="${blog.title}">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left labeled action input">
+                            <label class="ui compat teal basic label">所属类别</label>
+                            <div class="ui fluid selection dropdown">
+                                <input type="hidden" id="typeId" name="blogType.id" th:value="${blog.blogType.id}">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">所属类别</div>
+                                <div class="menu">
+                                    <tr th:each="blogType : ${blogTypes}">
+                                        <div class="item" data-value="${blogType.id}" th:attr="data-value=${blogType.id}">[[${blogType.typeName}]]</div>
+                                    </tr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div id="md-content" style="z-index: 1 !important;">
+                        <textarea id="content" name="content" placeholder="博客内容" style="display: none;" th:text="${blog.content}">
+                        [TOC]
+
+#### Disabled options
+
+- TeX (Based on KaTeX);
+- Emoji;
+- Task lists;
+- HTML tags decode;
+- Flowchart and Sequence Diagram;
+                        </textarea>
+                    </div>
+                </div>
+                <div class="ui error message"></div>
+                <div class="ui mini positive message" th:unless="${#strings.isEmpty(msg)}" th:if="${msg}">博客发布成功</div>
+                <div class="ui mini negative message" th:unless="${#strings.isEmpty(msg)}" th:if="${msg} eq false">博客发布失败</div>
+                <div class="ui right aligned container">
+                    <div id="save_btn" class="ui secondary button">保存</div>
+                    <div id="publish_btn" class="ui teal button">发布</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="../../../static/lib/editormd/editormd.min.js" th:src="@{/static/lib/editormd/editormd.min.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var ctxPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+
+    //初始化markdown编辑器
+    var contentEditor;
+
+    $(function() {
+        contentEditor = editormd("md-content", {
+            width   : "100%",
+            height  : 500,
+            syncScrolling : "single",
+            path    : ctxPath+"static/lib/editormd/lib/"
+        });
+    });
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+    $('.ui.form').form({
+        fields : {
+            title : {
+                identifier : 'title',
+                rules : [{
+                    type : 'empty',
+                    prompt : '博客标题: 请输入博客标题'
+                }]
+            },
+            typeId : {
+                identifier: 'typeId',
+                rules : [{
+                    type : 'empty',
+                    prompt : '博客类别: 请输入博客类别'
+                }]
+            },
+
+            content : {
+                identifier: 'content',
+                rules : [{
+                    type : 'empty',
+                    prompt : '内容: 请输入博客内容'
+                }]
+            }
+        }
+    });
+
+    $('#save_btn').click(function () {
+        $('[name="published"]').val(false);
+        $('#blog_form').submit();
+    });
+
+    $('#publish_btn').click(function () {
+        $('[name="published"]').val(true);
+        $('#blog_form').submit();
+    });
+
+    // function submit() {
+    //     $.ajax({
+    //         type: "POST",
+    //         dataType: "json",
+    //         url: "/db_blog/admin/blog/blogAdd",
+    //         data: {
+    //             "title" : $("#title").val(),
+    //             "typeId" : $('#typeId').val(),
+    //             "content" : $('#content').val()
+    //         },
+    //         success: function (data){
+    //             if(data.msg==200){
+    //                 $("#postMessage").addClass("ui mini positive message");
+    //                 $("#postMessage").text("博客发布成功");
+    //             } else{
+    //                 $("#postMessage").addClass("ui mini negative message");
+    //                 $("#postMessage").text("博客发布失败");
+    //             }
+    //         }
+    //     });
+    // }
+</script>
+
+</body>
+</html>

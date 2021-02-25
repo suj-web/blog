@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>评论列表</title>
+</head>
+<body>
+<div>
+    <div class="ui m-container-large">
+        <div class="ui top attached segment">
+            <h3 class="ui teal header">评论列表</h3>
+        </div>
+        <div class="ui bottom attached segment">
+            <table class="ui celled table center aligned">
+            <thead>
+            <tr>
+                <th class="one wide">编号</th>
+                <th class="two wide">姓名</th>
+                <th class="three wide">邮箱地址</th>
+                <th class="two wide">回复对象</th>
+                <th class="four wide">内容</th>
+                <th class="two wide">发布日期</th>
+                <th class="two wide">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <span th:if="not ${#lists.isEmpty(commentList)}">
+                <tr th:each="comment : ${commentList}">
+                    <td th:text="${comment.id}">1</td>
+                    <td th:text="${comment.commenterName}" th:if="${comment.adminComment} eq false">王杰</td>
+                    <td th:text="${comment.commenterName}" th:if="${comment.adminComment}" style="color:#00b5ad!important">博主</td>
+                    <td th:text="${comment.commenterEmail}">3212179845@qq.com</td>
+                    <td th:text="${comment.parentId}==0 ? '博主':(${comment.parentComment.adminComment} ? '博主' : ${comment.parentComment.commenterName})">林顿</td>
+                    <td th:text="${comment.content}">我的故事很长，你愿听，我愿讲</td>
+                    <td th:text="${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}">2020-02-02</td>
+                    <td>
+                        <a href="#" th:href="@{/admin/comment/commentDelete(commentId=${comment.id},blogId=${blogId})}"
+                            class="ui mini red basic button"><i class="ui trash alternate icon"></i>删除</a>
+                    </td>
+                </tr>
+            </span>
+            <span th:if="${#lists.isEmpty(commentList)}">
+                <tr>
+                    <td colspan="7">亲，还没有评论哟...</td>
+                </tr>
+            </span>
+            </tbody>
+            <span th:if="not ${#lists.isEmpty(commentList)}">
+                <tfoot>
+            <tr>
+                <th colspan="7">
+                    <div class="ui mini pagination menu">
+                        <a href="#" class="icon item"
+                           th:href="@{/admin/comment/commentList(pageNum=${commentPageInfo.pageNum}-1,pageSize=10,blogId=${blogId})}">上一页</a>
+                        <a href="#" class="icon item"
+                           th:href="@{/admin/comment/commentList(pageNum=${commentPageInfo.pageNum}+1,pageSize=10,blogId=${blogId})}">下一页</a>
+                    </div>
+                    &nbsp;&nbsp;
+                    <span>共[[${commentPageInfo.pages}]]页</span>
+                </th>
+            </tr>
+            </tfoot>
+            </span>
+        </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</body>
+</html>

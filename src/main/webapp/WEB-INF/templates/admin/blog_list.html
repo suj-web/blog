@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>新增博客</title>
+</head>
+<body>
+<div>
+    <div class="ui m-container-large">
+        <div class="ui top attached segment">
+            <h3 class="ui teal header">博客列表</h3>
+        </div>
+        <div class="ui bottom attached segment">
+            <table class="ui celled table center aligned">
+                <thead>
+                <tr>
+                    <th class="two wide">编号</th>
+                    <th class="four wide">标题</th>
+                    <th class="three wide">发布日期</th>
+                    <th class="three wide">类别</th>
+                    <th class="four wide">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="blog : ${blogs}">
+                    <td th:text="${blog.id}">1</td>
+                    <td th:text="${blog.title}">标题</td>
+                    <td th:text="${#dates.format(blog.releaseDate,'yyyy-MM-dd HH:mm')}">2020-02-02</td>
+                    <td th:text="${blog.blogType.TypeName}">Java</td>
+                    <td>
+                        <a href="#" th:href="@{/admin/blog/toBlogEdit(id=${blog.id})}" class="ui mini teal basic button">编辑</a>
+                        <a href="#" th:href="@{/admin/blog/blogDelete(id=${blog.id})}" class="ui mini red basic button">删除</a>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="5">
+                        <div class="ui mini pagination menu">
+                            <a href="#" class="icon item" th:href="@{/admin/blog/blogList(pageNum=${blogInfo.pageNum}-1,pageSize=10)}">上一页</a>
+                            <a href="#" class="icon item" th:href="@{/admin/blog/blogList(pageNum=${blogInfo.pageNum}+1,pageSize=10)}">下一页</a>
+                        </div>
+                        &nbsp;&nbsp;
+                        <span>共[[${blogInfo.pages}]]页</span>
+                        <a href="#" th:href="@{/admin/blog/toWriteBlog}" class="ui mini right floated teal basic button" style="position: absolute;right: 12em;">新增</a>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</body>
+</html>

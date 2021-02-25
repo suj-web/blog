@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>博客类型编辑</title>
+</head>
+<body>
+<div class="m-container-mini m-padded-tb-big">
+    <div class="ui container" style="max-width: 30em !important;">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal header">
+                    <div class="content">修改博客类别</div>
+                </h2>
+                <form action="#" class="ui large form" method="post" th:action="@{/admin/blogType/typeEdit}">
+                    <div class="ui stacked segment">
+                        <input type="hidden" name="id" th:value="${blogType.id}">
+                        <div class="field">
+                            <div class="ui left labeled input">
+                                <div class="ui label">
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">类别名称</font>
+                                    </font>
+                                </div>
+                                <input type="text" name="typeName" placeholder="类别名称" th:value="${blogType.typeName}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left labeled input">
+                                <div class="ui label">
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">类别编号</font>
+                                    </font>
+                                </div>
+                                <input type="text" name="orderNo" placeholder="编号" th:value="${blogType.orderNo}">
+                            </div>
+                        </div>
+                        <div class="ui fluid large teal submit button">提交</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+
+    $('.ui.form').form({
+        fields: {
+            typeName: {
+                identifier: "typeName",
+                rules: [{
+                    type: "empty",
+                    prompt: "请输入博客类别名称"
+                }]
+            },
+            orderNo: {
+                identifier: "orderNo",
+                rules: [{
+                    type: "empty",
+                    prompt: "请输入博客类别编号"
+                }]
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

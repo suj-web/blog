@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/lib/editormd/css/editormd.css" th:href="@{/static/lib/editormd/css/editormd.css}">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>博主信息管理</title>
+</head>
+<body>
+<div>
+    <div class="ui m-container-large">
+        <div class="ui top attached segment">
+            <h3 class="ui teal header">修改个人信息</h3>
+        </div>
+        <div class="ui bottom attached segment">
+            <form action="#" method="post" class="ui form" enctype="multipart/form-data" th:action="@{/blogger/personalMessageEdit}">
+                <input type="hidden" name="id" value="1">
+                <div class="two fields">
+                    <div class="required field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">姓名</label>
+                            <input type="text" name="username" id="username" placeholder="姓名" th:value="${blogger}!=null ? ${blogger.username}:''">
+                        </div>
+                    </div>
+                    <div class="required field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">姓名</label>
+                            <input type="text" name="password" id="password" placeholder="密码" th:value="${blogger}!=null ? ${blogger.username}:''">
+                        </div>
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="required field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">昵称</label>
+                            <input type="text" name="nickname" id="nickname" placeholder="昵称" th:value="${blogger}!=null ? ${blogger.nickname}:''">
+                        </div>
+                    </div>
+                    <div class="required field">
+                        <div class="ui left labeled input">
+                            <label class="ui teal basic label">个性签名</label>
+                            <input type="text" name="sign" id="sign" placeholder="个性签名" th:value="${blogger}!=null ? ${blogger.sign}:''">
+                        </div>
+                    </div>
+                </div>
+                <div class="required field">
+                    <label for="imageName" class="ui teal basic label">头像图片</label>
+                    <img id="pic" class="m-circle-image" src="../../../static/images/bg.jpg" th:src="@{/static/images/avatar/avatar.jpg}" alt="">
+                    <input id="imageName"  type="file" name="file" accept="image/*" style="display: none">
+                </div>
+                <div class="required field">
+                    <label for="profile" class="ui teal basic label">个人信息</label>
+                    <textarea name="profile" id="profile" rows="3" th:text="${blogger}!=null ? ${blogger.profile}"></textarea>
+                </div>
+                <div class="ui error message"></div>
+                <div class="ui mini negative message" th:unless="${#strings.isEmpty(update_msg)}" th:if="${update_msg} eq false">个人信息修改失败</div>
+                <div class="ui right aligned container">
+                    <button class="ui teal button">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var ctxPath = /*[[@{/}]]*/ '';
+    /*]]>*/
+
+
+    $(function () {
+        //上传图片
+        $("#pic").click(function () {
+            $("#imageName").click();
+            $("#imageName").on("change", function () {
+                var objUrl = getObjectURL(this.files[0]);
+                if (objUrl) {
+                    $("#pic").attr("src", objUrl);
+                }
+            });
+        });
+    });
+
+
+
+    function getObjectURL(file) {
+        var url = null;
+        if(window.createObjectURL!=undefined) {
+            url = window.createObjectURL(file);
+        } else if(window.URL!=undefined) {
+            url = window.URL.createObjectURL(file);
+        } else if(window.webkitURL!=undefined) {
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+
+    $('.ui.form').form({
+        fields : {
+            username : {
+                identifier : 'username',
+                rules : [{
+                    type : 'empty',
+                    prompt : '姓名: 请输入姓名'
+                }]
+            },
+            password : {
+                identifier: 'password',
+                rules : [{
+                    type : 'empty',
+                    prompt : '密码: 请输入密码'
+                }]
+            },
+
+            nickname : {
+                identifier: 'nickname',
+                rules : [{
+                    type : 'empty',
+                    prompt : '昵称: 请输入昵称'
+                }]
+            },
+            sign : {
+                identifier: 'sign',
+                rules : [{
+                    type : 'empty',
+                    prompt : '个性签名: 请输入个性签名'
+                }]
+            },
+            imageName : {
+                identifier: 'imageName',
+                rules : [{
+                    type : 'empty',
+                    prompt : '头像地址: 请输入头像地址'
+                }]
+            },
+            profile : {
+                identifier: 'profile',
+                rules : [{
+                    type : 'empty',
+                    prompt : '个人信息: 请输入个人信息'
+                }]
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

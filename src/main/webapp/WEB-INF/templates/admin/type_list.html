@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../../static/css/me.css" th:href="@{/static/css/me.css}">
+    <title>博客类型列表</title>
+</head>
+<body>
+<div>
+    <div class="ui m-container-big">
+        <div class="ui top attached segment">
+            <h3 class="ui teal header">博客类型列表</h3>
+        </div>
+        <div class="ui bottom attached segment">
+            <table class="ui celled table center aligned">
+            <thead>
+            <tr>
+                <th class="three wide"></th>
+                <th class="six wide">名称</th>
+                <th class="three wide">序号</th>
+                <th class="four wide">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="type : ${blogTypes}">
+                <td th:text="${type.id}">1</td>
+                <td th:text="${type.typeName}">可以练习清单</td>
+                <td th:text="${type.orderNo}">1</td>
+                <td>
+                    <a href="#" th:href="@{/admin/blogType/toTypeEdit(id=${type.id})}" class="ui mini teal basic button">编辑</a>
+                    <a href="#" th:href="@{/admin/blogType/typeDelete(id=${type.id})}" class="ui mini red basic button">删除</a>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="4">
+                    <div class="ui mini pagination menu">
+                        <a href="#" class="icon item" th:href="@{/admin/blogType/typeList(pageNum=${blogTypeInfo.pageNum}-1,pageSize=10)}">上一页</a>
+                        <a href="#" class="icon item" th:href="@{/admin/blogType/typeList(pageNum=${blogTypeInfo.pageNum}+1,pageSize=10)}">下一页</a>
+                    </div>
+                    &nbsp;&nbsp;
+                    <span>共[[${blogTypeInfo.pages}]]页</span>
+                    <a href="#" th:href="@{/admin/blogType/toTypeAdd}" class="ui mini right floated teal basic button" style="position: absolute;right: 12em;">新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+</body>
+</html>
